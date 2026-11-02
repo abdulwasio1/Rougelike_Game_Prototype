@@ -21,6 +21,7 @@ public class HelloController {
     private static final int UP = 2;
     private static final int DOWN = 3;
 
+
     @FXML
     private Canvas canvas;
 
@@ -35,6 +36,8 @@ public class HelloController {
     private Camera camera;
 
     private Player player;
+
+    private gameRender render;
 
     private int currentDirection = -1;
 
@@ -52,6 +55,8 @@ public class HelloController {
 
         player = new Player(0, 0);
         camera = new Camera(WIDTH, HEIGHT, SQUARE_SIZE, 1.5);
+        render = new gameRender(WIDTH , HEIGHT ,SQUARE_SIZE);
+
 
         gc = canvas.getGraphicsContext2D();
 
@@ -75,8 +80,11 @@ public class HelloController {
 
         gameWorld = new GameWorld(player, blockImage);
 
+
+
         gameWorld.getCurrentBlock();
         gameWorld.generateItems();
+
 
         updateHUD();
 
@@ -125,60 +133,55 @@ public class HelloController {
 
         updateCamera();
 
-        gc.save();
+//        gc.save();
+//
+//        gc.scale(1.5, 1.5);
+//
+//        gc.translate(-camera.getCameraX(), -camera.getCameraY());
+//
+//        drawBackground(gc);
+//        drawItems(gc);
+//        drawBlock(gc);
+//        drawPlayer(gc);
+//
+//        gc.restore();
+        render.render(gc , gameWorld , player , camera , backgroundImage , playerImage , blockImage);
 
-        gc.scale(1.5, 1.5);
-
-        gc.translate(-camera.getCameraX(), -camera.getCameraY());
-
-        drawBackground(gc);
-        drawItems(gc);
-        drawBlock(gc);
-        drawPlayer(gc);
-
-        gc.restore();
     }
 
-    private void drawBlock(GraphicsContext gc) {
-
-        for (Block block : gameWorld.getBlocks()) {
-
-            gc.drawImage(
-                    blockImage,
-                    block.x * SQUARE_SIZE,
-                    block.y * SQUARE_SIZE,
-                    SQUARE_SIZE - 5,
-                    SQUARE_SIZE - 5
-            );
-        }
-    }
+//    private void drawBlock(GraphicsContext gc) {
+//
+//        for (Block block : gameWorld.getBlocks()) {
+//
+//            gc.drawImage(
+//                    blockImage,
+//                    block.x * SQUARE_SIZE,
+//                    block.y * SQUARE_SIZE,
+//                    SQUARE_SIZE - 5,
+//                    SQUARE_SIZE - 5
+//            );
+//        }
+//    }
 
     public void updateCamera() {
         camera.update(player);
 
     }
 
-    public void drawBackground(GraphicsContext gc) {
+//    public void drawBackground(GraphicsContext gc) {
+//            render.drawBackground(gc , WIDTH , HEIGHT);
+//    }
 
-        gc.drawImage(
-                backgroundImage,
-                0,
-                0,
-                WIDTH,
-                HEIGHT
-        );
-    }
-
-    public void drawPlayer(GraphicsContext gc) {
-
-        gc.drawImage(
-                playerImage,
-                player.getX() * SQUARE_SIZE,
-                player.getY() * SQUARE_SIZE,
-                SQUARE_SIZE + 5,
-                SQUARE_SIZE + 5
-        );
-    }
+//    public void drawPlayer(GraphicsContext gc) {
+//
+//        gc.drawImage(
+//                playerImage,
+//                player.getX() * SQUARE_SIZE,
+//                player.getY() * SQUARE_SIZE,
+//                SQUARE_SIZE + 5,
+//                SQUARE_SIZE + 5
+//        );
+//    }
 
     void moveRight() {
 
@@ -246,19 +249,19 @@ public class HelloController {
         }
     }
 
-    void drawItems(GraphicsContext gc) {
-
-        for (GameItem item : gameWorld.getItems()) {
-
-            gc.drawImage(
-                    item.img,
-                    item.x + 6,
-                    item.y + 5,
-                    SQUARE_SIZE - 15,
-                    SQUARE_SIZE - 15
-            );
-        }
-    }
+//    void drawItems(GraphicsContext gc) {
+//
+//        for (GameItem item : gameWorld.getItems()) {
+//
+//            gc.drawImage(
+//                    item.img,
+//                    item.x + 6,
+//                    item.y + 5,
+//                    SQUARE_SIZE - 15,
+//                    SQUARE_SIZE - 15
+//            );
+//        }
+//    }
 
     private void collectItem(GameItem item) {
 

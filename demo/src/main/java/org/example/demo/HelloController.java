@@ -32,10 +32,7 @@ public class HelloController {
 
     private GameWorld gameWorld;
 
-    private double zoom = 1.5;
-
-    private int cameraX;
-    private int cameraY;
+    private Camera camera;
 
     private Player player;
 
@@ -54,6 +51,7 @@ public class HelloController {
     public void initialize() {
 
         player = new Player(0, 0);
+        camera = new Camera(WIDTH, HEIGHT, SQUARE_SIZE, 1.5);
 
         gc = canvas.getGraphicsContext2D();
 
@@ -131,7 +129,7 @@ public class HelloController {
 
         gc.scale(1.5, 1.5);
 
-        gc.translate(-cameraX, -cameraY);
+        gc.translate(-camera.getCameraX(), -camera.getCameraY());
 
         drawBackground(gc);
         drawItems(gc);
@@ -156,31 +154,8 @@ public class HelloController {
     }
 
     public void updateCamera() {
+        camera.update(player);
 
-        double playerWorldX =
-                player.getX() * SQUARE_SIZE + SQUARE_SIZE / 2.0;
-
-        double playerWorldY =
-                player.getY() * SQUARE_SIZE + SQUARE_SIZE / 2.0;
-
-        double desiredCameraX =
-                playerWorldX - WIDTH / (zoom * 2);
-
-        double desiredCameraY =
-                playerWorldY - HEIGHT / (zoom * 2);
-
-        double maxCameraX = WIDTH - WIDTH / zoom;
-        double maxCameraY = HEIGHT - HEIGHT / zoom;
-
-        cameraX = (int) Math.max(
-                0,
-                Math.min(desiredCameraX, maxCameraX)
-        );
-
-        cameraY = (int) Math.max(
-                0,
-                Math.min(desiredCameraY, maxCameraY)
-        );
     }
 
     public void drawBackground(GraphicsContext gc) {

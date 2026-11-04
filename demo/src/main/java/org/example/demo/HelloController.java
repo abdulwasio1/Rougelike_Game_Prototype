@@ -20,6 +20,7 @@ public class HelloController {
     private static final int LEFT = 1;
     private static final int UP = 2;
     private static final int DOWN = 3;
+    private static final int numOfRooms = 11;
 
 
     @FXML
@@ -38,7 +39,7 @@ public class HelloController {
     private Player player;
 
     private gameRender render;
-
+    private DungeonGraph dungeonGraph;
     private int currentDirection = -1;
 
     @FXML
@@ -56,6 +57,15 @@ public class HelloController {
         player = new Player(0, 0);
         camera = new Camera(WIDTH, HEIGHT, SQUARE_SIZE, 1.5);
         render = new gameRender(WIDTH , HEIGHT ,SQUARE_SIZE);
+        dungeonGraph = new DungeonGraph();
+        for (int i = 0; i <= 10; i++) {
+            dungeonGraph.addRoom(i);
+        }
+
+//        for (int i = 0; i < 10; i++) {
+//            dungeonGraph.connectStages(i, i + 1);
+//        }
+
 
 
         gc = canvas.getGraphicsContext2D();
@@ -65,6 +75,7 @@ public class HelloController {
                         "/org/example/demo/img/background.jpg"
                 )
         );
+
 
         playerImage = new Image(
                 getClass().getResourceAsStream(
@@ -79,9 +90,6 @@ public class HelloController {
         );
 
         gameWorld = new GameWorld(player, blockImage);
-
-
-
         gameWorld.getCurrentBlock();
         gameWorld.generateItems();
 
@@ -132,56 +140,13 @@ public class HelloController {
         checkItemsCollected();
 
         updateCamera();
-
-//        gc.save();
-//
-//        gc.scale(1.5, 1.5);
-//
-//        gc.translate(-camera.getCameraX(), -camera.getCameraY());
-//
-//        drawBackground(gc);
-//        drawItems(gc);
-//        drawBlock(gc);
-//        drawPlayer(gc);
-//
-//        gc.restore();
         render.render(gc , gameWorld , player , camera , backgroundImage , playerImage , blockImage);
 
     }
-
-//    private void drawBlock(GraphicsContext gc) {
-//
-//        for (Block block : gameWorld.getBlocks()) {
-//
-//            gc.drawImage(
-//                    blockImage,
-//                    block.x * SQUARE_SIZE,
-//                    block.y * SQUARE_SIZE,
-//                    SQUARE_SIZE - 5,
-//                    SQUARE_SIZE - 5
-//            );
-//        }
-//    }
-
     public void updateCamera() {
         camera.update(player);
 
     }
-
-//    public void drawBackground(GraphicsContext gc) {
-//            render.drawBackground(gc , WIDTH , HEIGHT);
-//    }
-
-//    public void drawPlayer(GraphicsContext gc) {
-//
-//        gc.drawImage(
-//                playerImage,
-//                player.getX() * SQUARE_SIZE,
-//                player.getY() * SQUARE_SIZE,
-//                SQUARE_SIZE + 5,
-//                SQUARE_SIZE + 5
-//        );
-//    }
 
     void moveRight() {
 
@@ -249,19 +214,6 @@ public class HelloController {
         }
     }
 
-//    void drawItems(GraphicsContext gc) {
-//
-//        for (GameItem item : gameWorld.getItems()) {
-//
-//            gc.drawImage(
-//                    item.img,
-//                    item.x + 6,
-//                    item.y + 5,
-//                    SQUARE_SIZE - 15,
-//                    SQUARE_SIZE - 15
-//            );
-//        }
-//    }
 
     private void collectItem(GameItem item) {
 
